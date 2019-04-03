@@ -10,7 +10,7 @@ sbin/start-nameserver
 ```
 Use your favourite web-browser to access the web interface at port 8888 (e.g. if you run it locally: ht<span>tp</span>://localhost:8888/).
 
-Stop the nameserver running the following script: 
+Stop the name server running the following script: 
 ```
 sbin/stop-nameserver
 ```
@@ -66,7 +66,7 @@ sbin/stop-nameserver
 
 ## User Creation and API Authentication
 ### Admin Account
-Admin priviledges are assigned to the first user that registers on the nameserver. 
+Admin priviledges are assigned to the first user that registers on the name server. 
 ### Registration and Login
 Assuming the name server is running on `http://localhost:8888`, you can login and register a new user using the name server web interface:
 
@@ -100,7 +100,7 @@ where:
 - `GF_TOKEN`: your API token
 
 ## Adding a Federated Dataset
-The "Datasets" section of the nameserver allows users to share their public datasets with other members of the federation.
+The "Datasets" section of the name server allows users to share their public datasets with other members of the federation.
 
 ![dslist](https://github.com/DEIB-GECO/GMQL-FederatedNS/raw/master/screenshots/datasets-list.png)
 
@@ -118,11 +118,11 @@ The following fields are available:
 - <b>Name</b> (mandatory): name of the dataset, available in your public repository, that you want to add to the federation. The name written in this field must exactly match the name of the dataset in your public repository
 - <b>Description</b>: a description of the dataset.
 - <b>Privacy</b>: defines the instances (or groups of instances) that will be allowed to use your dataset. Choose among the instances (groups) in the left box and move them to the right box to allow them to use your dataset. By default, your instance is always allowed to see your datasets.
-- <b>Repositories</b> : defines in which repositories (instances) the same dataset is available. By default your repository is added to this list. This feature is added to improve availability and performance of the system. For example, if you are running another instance of GMQL that has the same dataset in its public repository, you may add that instance in this list. If one of the instances in this list is offline, another instance in the list may be chosen for execution. Instances different from yours may be also chosen for optimization reasons. <u>Currently, GMQL-Federated does not support multiple repositories</u>.
+- <b>Repositories</b>: defines in which repositories (instances) the same dataset is available. By default your repository is added to this list. This feature is added to improve availability and performance of the system. For example, if you are running another instance of GMQL that has the same dataset in its public repository, you may add that instance in this list. If one of the instances in this list is offline, another instance in the list may be chosen for execution. Instances different from yours may be also chosen for optimization reasons. <u>Currently, GMQL-Federated does not handle multiple copies of the same dataset, using only the dataset owners's repository.</u>.
 
   
 ## Groups 
-The "Groups" section of the nameserver allows users to create groups of instances. Groups simplify the process of sharing a dataset with other members of the federation: as shown before, instead of defining the privacy of a dataset by sharing it with single instances, you may share it with a pre-defined group including multiple instances.
+The "Groups" section of the name server allows users to create groups of instances. Groups simplify the process of sharing a dataset with other members of the federation: as shown before, instead of defining the privacy of a dataset by sharing it with single instances, you may share it with a pre-defined group including multiple instances.
 
 ![gplist](https://github.com/DEIB-GECO/GMQL-FederatedNS/raw/master/screenshots/groups-list.png)
 
