@@ -45,7 +45,8 @@ JS_PATH="$SCRIPT_PATH"/../NameServer/static/js/api.js
 LINE="var NGINX_PRE = '$PRE';"
 LINE="${LINE//\//\/}"
 echo "Replacing first line of $JS_PATH with $LINE"
-sed -i '' "1s/.*/$LINE/" $JS_PATH
+# on mac add '' after i
+sed -i "1s/.*/$LINE/" $JS_PATH
 
 echo "Port: $PORT"
 
