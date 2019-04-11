@@ -1,4 +1,5 @@
-var API_ROOT = "http://"+window.location.host+"/api/";
+var NGINX_PRE = 'ciao/';
+var API_ROOT = "http://"+window.location.host+"/"+NGINX_PRE+"api/";
 
 var API = {
     instance: API_ROOT+"instance/",

@@ -1,7 +1,9 @@
 FROM python:2.7
 
+ARG nginx_pre
 ARG db
 ENV NAMESERVER_DB_PATH=${db}
+ENV NAMESERVER_NGINX_PRE=${nginx_pre}
 
 RUN mkdir -p /usr/src/app
 RUN mkdir -p /external

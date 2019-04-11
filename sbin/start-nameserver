@@ -32,10 +32,25 @@ if [ -z "$2" ]
    PORT=$2
 fi
 
+# SET NGINX PREFIX
+if [ -z "$3" ]
+  then
+   PRE=''
+  else
+   PRE=$3
+fi
+
+#Replace first line of api.js
+JS_PATH="$SCRIPT_PATH"/../NameServer/static/js/api.js
+LINE="var NGINX_PRE = '$PRE';"
+LINE="${LINE//\//\/}"
+echo "Replacing first line of $JS_PATH with $LINE"
+sed -i '' "1s/.*/$LINE/" $JS_PATH
+
 echo "Port: $PORT"
 
 # BUILD
-docker build "$SCRIPT_PATH"/../ -t nameserver --build-arg db=/external/db.sqlite3
+docker build "$SCRIPT_PATH"/../ -t nameserver --build-arg db=/external/db.sqlite3 --build-arg nginx_pre=$PRE
 
 # RUN
 docker run -p $PORT:8800 --mount type=bind,source="$SRC",target=/external --name gmql-fed-ns --detach nameserver 
