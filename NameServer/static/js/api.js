@@ -1,4 +1,4 @@
-var NGINX_PRE = 'ciao/';
+var NGINX_PRE = '';
 var API_ROOT = "http://"+window.location.host+"/"+NGINX_PRE+"api/";
 
 var API = {
