@@ -123,6 +123,53 @@ class Group(models.Model):
 
     instances  = models.ManyToManyField(Instance, related_name='group_instance')
 
+    def delete(self,  using=None, keep_parents=False):
+        print("deleting "+ self._get_pk_val())
+
+        for ds in Dataset.objects.filter(allowed_to__in=[ self._get_pk_val()]):
+            # ds is a dataset containing that group
+            new_allowed = Dataset.objects.get(pk=ds.pk).allowed_to.exclude(pk=self._get_pk_val())
+            old_copies  = Dataset.objects.get(pk=ds.pk).copies.all()
+
+            if not "GMQL-ALL" in map(lambda group: group.name, new_allowed):
+                allowed_instances = []
+                for gp in new_allowed:
+                    allowed_instances += Group.objects.get(name=gp.name).instances.all()
+
+                to_delete = set(old_copies).difference(set(allowed_instances))
+                new_copies = set(old_copies).difference(to_delete)
+                ds.copies = new_copies
+                ds.save()
+
+        return super(Group, self).delete(using=None, keep_parents=False)
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+
+        print("updating "+ self._get_pk_val())
+
+        to_return =  super(Group, self).save(force_insert=False, force_update=False, using=None,
+             update_fields=None)
+
+        for ds in Dataset.objects.filter(allowed_to__in=[ self._get_pk_val()]):
+            # ds is a dataset containing that group
+            new_allowed = Dataset.objects.get(pk=ds.pk).allowed_to.all()
+            old_copies  = Dataset.objects.get(pk=ds.pk).copies.all()
+
+            if not "GMQL-ALL" in map(lambda group: group.name, new_allowed):
+                allowed_instances = []
+                for gp in new_allowed:
+                    allowed_instances += Group.objects.get(name=gp.name).instances.all()
+
+                to_delete = set(old_copies).difference(set(allowed_instances))
+                new_copies = set(old_copies).difference(to_delete)
+                ds.copies = new_copies
+                ds.save()
+
+        return to_return
+
+
+
     def __str__(self):
         return self.name + " (created by " + self.owner.username + ")"
 
