@@ -538,6 +538,8 @@ app.controller('datasets_ctrl', function($scope, $location, $http, $rootScope, $
                 if (response.status == 500 && response.data.includes("UNIQUE")){
                     // TODO: improve server-side
                     setAlert("Dataset "+dataset.name+" already exists.", false);
+                } else if (response.status == 400) {
+                    setAlert("Error: "+response.data.message, false);
                 } else {
                     setAlert("Error.", false);
                 }
@@ -588,6 +590,8 @@ app.controller('datasets_ctrl', function($scope, $location, $http, $rootScope, $
                 if (response.status == 500 && response.data.includes("UNIQUE")){
                     // TODO: improve server-side
                     setAlert("Dataset "+dataset.name+" already exists.", false);
+                } else if (response.status == 400) {
+                    setAlert("Error: "+response.data.message, false);
                 } else {
                     setAlert("Error.", false);
                 }

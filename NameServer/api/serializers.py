@@ -101,6 +101,38 @@ class DatasetSerializer(serializers.ModelSerializer):
     def get_identifier(self, obj):
         return '{}.{}'.format(obj.owner_id, obj.name)
 
+    def create(self, validated_data):
+
+        allowed_to = validated_data["allowed_to"]
+
+        # Check if the dataset is visible to the copies
+        if not "GMQL-ALL" in map(lambda group: group.name, allowed_to):
+            copies = validated_data["copies"]
+            allowed_instances = []
+            for gp in allowed_to:
+                allowed_instances += Group.objects.get(name=gp.name).instances.all()
+            if not set(copies).issubset(set(allowed_instances)):
+                error = {'message': 'The dataset must be visible to all hosting repositories.'}
+                raise serializers.ValidationError(error)
+
+        return super(DatasetSerializer, self).create(validated_data)
+
+    def update(self, instance, validated_data):
+
+        allowed_to = validated_data["allowed_to"]
+
+        # Check if the dataset is visible to the copies
+        if not "GMQL-ALL" in map(lambda group: group.name, allowed_to):
+            copies = validated_data["copies"]
+            allowed_instances = []
+            for gp in allowed_to:
+                allowed_instances += Group.objects.get(name=gp.name).instances.all()
+            if not set(copies).issubset(set(allowed_instances)):
+                error = {'message': 'The dataset must be visible to all hosting repositories.'}
+                raise serializers.ValidationError(error)
+
+        return super(DatasetSerializer, self).update(instance, validated_data)
+
     class Meta:
         model = Dataset
         fields = ('identifier', 'name', 'owner', 'author', 'description', 'pub_date', 'copies', 'allowed_to')
