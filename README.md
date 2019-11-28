@@ -25,7 +25,7 @@ In this case the requirements are:
 - markdown 
 - django-filter
 - djangorestframework-xml
-- sqlite3
+- pysqlite
 
 ### Running within Docker
 In this case you just need to install Docker and start the Docker daemon.
