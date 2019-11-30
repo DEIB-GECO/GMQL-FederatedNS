@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from background_task import background
 
 
 import uuid
+import requests
 
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils import timezone
@@ -106,6 +108,7 @@ class Location(models.Model):
     name = models.CharField(max_length=50)
     details = models.CharField(max_length=300)
     URI = models.CharField(max_length=100)
+    alive = models.BooleanField(default=True)
 
     instance = models.OneToOneField(
         Instance,
@@ -114,6 +117,20 @@ class Location(models.Model):
         primary_key=True
     )
 
+    def checkAlive(self):
+        response = None
+        try:
+            response = requests.get(self.URI, timeout=7)
+            if (response != None and response.status_code == 200):
+                self.alive=True
+            else:
+                self.alive=False
+
+        except:
+            self.alive=False
+        finally:
+            self.save()
+            
     def __str__(self):
         return self.name + " ( " + self.URI + " )"
 
@@ -222,3 +239,7 @@ class Authentication(models.Model):
 
     def __str__(self):
         return self.authentication_identifier
+
+
+
+

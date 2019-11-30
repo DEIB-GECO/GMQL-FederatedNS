@@ -23,8 +23,10 @@
                    class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon1">
         </div>
     </div>
-    <div class="col-md-2 offset-md-4">
-
+    <div class="col-md-2">
+            <a class="btn btn-primary" style="color:white" ng-click="refreshStatus()">Refresh Status</a>
+    </div>
+    <div class="col-md-4">
         <select ng-change="paginate()"  ng-model="pagination.numPerPage" 
                 class="form-control " placeholder="Search" aria-label="Search" aria-describedby="basic-addon1">
             <option ng-repeat="opt in pagination.ippOptions" 
@@ -40,6 +42,8 @@
         <tr>
             <th>Name</th>
             <th>Description</th>
+            <th>URL</th>
+            <th>Status</th>
             <th>Email</th>
         </tr>
     </thead>
@@ -52,6 +56,11 @@
                 {{ins.instancename}}
             </td>
             <td>{{ins.description}}</td>
+            <td><a  target="_blank" href="{{ins.locationObject.URI}}">{{ins.locationObject.URI}}</a> </td>
+            <td>
+                <p style="color:red" ng-if="!ins.locationObject.alive">offline</p>
+                <p style="color:green" ng-if="ins.locationObject.alive">online</p>
+            </td>
             <td>
                 <a href = "mailto: {{ins.email}}">{{ins.email}}</a>
             </td>

@@ -6,5 +6,6 @@ var API = {
     token: API_ROOT+"token/",
     location: API_ROOT+"location/",
     dataset: API_ROOT+"dataset/",
-    group: API_ROOT+"group/"
+    group: API_ROOT+"group/",
+    livecheck: API_ROOT+"livecheck"
 }

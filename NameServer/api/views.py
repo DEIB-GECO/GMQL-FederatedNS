@@ -1,19 +1,21 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from threading import Thread, Event
+
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 from django.db.models.functions import Concat
 from django.db.models import  Value as V
 from rest_framework import viewsets, permissions, mixins, status
-from rest_framework.response import Response
+
 from django.db.models import Q
 
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission
 
-
+from tasks import periodic_check_alive
 from .serializers import *
 
 class IsAuthenticatedOrPostOnly(BasePermission):
@@ -250,3 +252,42 @@ class AuthenticationViewSet(mixins.CreateModelMixin,
         serializer.save(client=self.request.user)
 
     permission_classes = ([permissions.IsAuthenticated])
+
+
+
+class MyThread(Thread):
+    period = 120
+    def __init__(self, event):
+        Thread.__init__(self)
+        self.stopped = event
+
+    def run(self):
+        while not self.stopped.wait(self.period):
+            PeriodicAction().list(None)
+            #all a function
+
+class PeriodicAction(viewsets.GenericViewSet):
+
+    queryset = Location.objects.all()
+    permission_classes = ([permissions.IsAuthenticated])
+    serializer_class = LocationSerializer
+
+    stopFlag = Event()
+
+    def start(self, period):
+        # called in api/urls.py
+        thread = MyThread(self.stopFlag)
+        thread.period = period
+
+        thread.daemon = True
+        thread.start()
+
+
+    def stop(self):
+        self.stopFlag.set()
+
+    def list(self, request, *args, **kwargs):
+        for location in  Location.objects.all():
+            location.checkAlive()
+
+        return Response(status=status.HTTP_200_OK, data="Checking live instances.")

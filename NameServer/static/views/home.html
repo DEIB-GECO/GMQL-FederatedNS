@@ -48,10 +48,16 @@
         <form ng-submit="saveLocation(logged_user.location)">
             <div class="form-group">
                 <div class="input-group mb-3">
+                    
                     <input type="url" class="form-control" placeholder="http://your-domain.com/gmql-rest/" aria-label="http://your-domain.com/gmql-rest/" aria-describedby="location-input" ng-model="logged_user.location" required>
                     <div class="input-group-append">
+                         
                         <button class="btn btn-outline-primary" type="submit">Save</button>
+                       
                     </div>
+                    <a ng-if="logged_user.location_alive" class="btn disabled" style="margin-left: 5px; background-color: #690; opacity:100; color:white;">online</a>
+                    <a ng-if="!logged_user.location_alive" class="btn disabled" style="margin-left: 5px; background-color: #905; opacity:100; color:white;">offline</a>
+                
                 </div>
             </div>
         </form>

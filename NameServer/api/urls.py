@@ -8,6 +8,9 @@ from django.conf.urls.static import static
 from api.views import CustomObtainAuthToken
 from . import views
 
+# Start periodic check
+views.PeriodicAction().start(settings.LIVECHECK_PERIOD)
+print("Livecheck every "+str(settings.LIVECHECK_PERIOD)+" seconds.")
 
 router = routers.DefaultRouter()
 router.register(r'dataset', views.DatasetViewSet)
@@ -15,6 +18,7 @@ router.register(r'instance', views.InstanceViewSet)
 router.register(r'group', views.GroupViewSet)
 router.register(r'location', views.LocationViewSet)
 router.register(r'authentication', views.AuthenticationViewSet)
+router.register(r'livecheck', views.PeriodicAction)
 
 
 

@@ -1,6 +1,14 @@
 import os
+import sys
+
+sys.path.append("..")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from threading import Thread, Event
+
+# interval of seconds before checking instances are alive
+LIVECHECK_PERIOD = os.environ.get('NAMESERVER_LIVECHECK_INTERVAL', 120)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -40,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'background_task'
 ]
 
 REST_FRAMEWORK = {

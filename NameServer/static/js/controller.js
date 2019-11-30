@@ -55,6 +55,7 @@ app.controller('ns_ctrl', function($scope, $http, $location, $rootScope) {
                         // SUCCESS
                         function(response) {
                             $rootScope.logged_user.location = response.data.URI;
+                            $rootScope.logged_user.location_alive = response.data.alive;
                         },
                         // ERROR
                         function(response){
@@ -174,7 +175,7 @@ app.controller('home_ctrl', function($scope, $http, $rootScope) {
 
         $http({
             method: 'PUT',
-            url:   API.location+$scope.logged_user.instancename+"/",
+            url:   API.location+$rootScope.logged_user.instancename+"/",
             data:  $.param(loc),
             headers: {'Content-Type': 'application/x-www-form-urlencoded',
                       'Authorization': 'Token '+$rootScope.logged_user.token}
@@ -185,6 +186,7 @@ app.controller('home_ctrl', function($scope, $http, $rootScope) {
                 $("#alert").removeClass("alert-danger");
                 $("#alert").addClass("alert-success");
                 $("#alert").fadeIn('medium');
+                 $rootScope.checkLogin();
             }, 
             //ERROR
             function(response) {
@@ -713,6 +715,26 @@ app.controller('instances_ctrl', function($scope, $location, $rootScope, $http, 
             // SUCCESS
             function(response) {
                 $scope.instances = response.data;
+
+                $scope.instances.forEach(function(instance){
+                    // Retrieve instance location
+                    $http({
+                        method: 'GET',
+                        url:   API.location+instance.location+"/",
+                        headers: {'Authorization': 'Token '+$rootScope.logged_user.token}
+
+                    }).then(
+                        // SUCCESS
+                        function(response) {
+                            instance.locationObject = response.data;
+                        },
+                        // ERROR
+                        function(response){
+                            console.error("Cannot retrieve instance location.");
+                        }
+                    );
+                })
+
                 $scope.pagination.originalDataset = $scope.instances;
                 $scope.paginate();
             }, 
@@ -723,6 +745,31 @@ app.controller('instances_ctrl', function($scope, $location, $rootScope, $http, 
             }
         );
     }
+
+
+    // Force the NS to check the status of all instances
+    $scope.refreshStatus = function() {
+        $http({
+            method: 'GET',
+            url:   API.livecheck+"/",
+            headers: {'Authorization': 'Token '+$rootScope.logged_user.token}
+
+        }).then(
+            // SUCCESS
+            function(response) {
+                window.alert("Refreshed");
+                getInstances();
+                console.log("checked.")
+            },
+            // ERROR
+            function(response){
+                
+                console.error("Cannot refresh status.");
+            }
+        );
+
+    }
+
 
     /* # Initialization # */
     getInstances();

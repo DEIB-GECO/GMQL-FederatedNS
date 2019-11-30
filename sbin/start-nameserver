@@ -40,6 +40,15 @@ if [ -z "$3" ]
    PRE=$3
 fi
 
+# SET LIVECHECK INTERVAL
+if [ -z "$4" ]
+  then
+   INTERVAL=''
+  else
+   INTERVAL=$3
+fi
+
+
 #Replace first line of api.js
 JS_PATH="$SCRIPT_PATH"/../NameServer/static/js/api.js
 LINE="var NGINX_PRE = '$PRE';"
@@ -51,7 +60,7 @@ sed -i "1s/.*/$LINE/" $JS_PATH
 echo "Port: $PORT"
 
 # BUILD
-docker build "$SCRIPT_PATH"/../ -t nameserver --build-arg db=/external/db.sqlite3 --build-arg nginx_pre=$PRE
+docker build "$SCRIPT_PATH"/../ -t nameserver --build-arg db=/external/db.sqlite3 --build-arg nginx_pre=$PRE --build-arg livecheck_interval=$INTERVAL
 
 # RUN
 docker run -p $PORT:8800 --mount type=bind,source="$SRC",target=/external --name gmql-fed-ns --detach nameserver 

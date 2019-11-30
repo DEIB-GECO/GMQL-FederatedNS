@@ -2,8 +2,10 @@ FROM python:2.7
 
 ARG nginx_pre
 ARG db
+ARG livecheck_interval
 ENV NAMESERVER_DB_PATH=${db}
 ENV NAMESERVER_NGINX_PRE=${nginx_pre}
+ENV NAMESERVER_LIVECHECK_INTERVAL=${livecheck_interval}
 
 RUN mkdir -p /usr/src/app
 RUN mkdir -p /external

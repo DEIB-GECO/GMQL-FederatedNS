@@ -74,10 +74,23 @@ class LocationSerializer(serializers.ModelSerializer):
         #return '{}.{}'.format(obj.instance.username, obj.name)
         #return '{}'.format(obj.instance.username)
 
+    def create(self, validated_data):
+
+        r = super(LocationSerializer, self).create(validated_data)
+        res = Location.objects.filter(name=validated_data['name']).first()
+        res.checkAlive()
+        return r
+
+    def update(self, instance, validated_data):
+        r = super(LocationSerializer, self).update(instance, validated_data)
+        instance.checkAlive()
+        return r
+
+
     class Meta:
         model = Location
-        fields = ('instance', 'name', 'details', 'URI')
-        read_only_fields = ('instance',)
+        fields = ('instance', 'name', 'details', 'URI', 'alive')
+        read_only_fields = ('instance', 'alive')
 
 
 class DatasetSerializer(serializers.ModelSerializer):
