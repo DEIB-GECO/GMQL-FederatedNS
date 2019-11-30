@@ -261,7 +261,7 @@ class MyThread(Thread):
         self.stopped = event
 
     def run(self):
-        while not self.stopped.wait(self.period):
+        while not self.stopped.wait(int(self.period)):
             PeriodicAction().list(None)
             #all a function
 
