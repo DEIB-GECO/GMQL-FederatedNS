@@ -23,4 +23,4 @@ EXPOSE 8800
 
 RUN python manage.py makemigrations
 
-CMD python manage.py migrate && python manage.py runserver 0.0.0.0:8800
+CMD python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8800
