@@ -60,7 +60,7 @@ sed -i "1s/.*/$LINE/" $JS_PATH
 echo "Port: $PORT"
 
 # BUILD
-docker build "$SCRIPT_PATH"/../ -t nameserver --build-arg db=/external/db.sqlite3 --build-arg nginx_pre=$PRE --build-arg livecheck_interval=$INTERVAL
+docker build --no-cache "$SCRIPT_PATH"/../ -t nameserver --build-arg db=/external/db.sqlite3 --build-arg nginx_pre=$PRE --build-arg livecheck_interval=$INTERVAL
 
 # RUN
 docker run -p $PORT:8800 --mount type=bind,source="$SRC",target=/external --name gmql-fed-ns --detach nameserver 
