@@ -13,7 +13,7 @@ WORKDIR /usr/src/app
 
 ADD NameServer ./
 
-RUN pip install django djangorestframework markdown django-filter djangorestframework-xml
+RUN pip install django djangorestframework markdown django-filter djangorestframework-xml requests
 
 RUN apt-get update && apt-get install -y \
 sqlite3 \
