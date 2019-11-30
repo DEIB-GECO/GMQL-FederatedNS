@@ -4,7 +4,6 @@ import sys
 sys.path.append("..")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-from threading import Thread, Event
 
 # interval of seconds before checking instances are alive
 LIVECHECK_PERIOD = os.environ.get('NAMESERVER_LIVECHECK_INTERVAL', 120)

@@ -15,7 +15,6 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission
 
-from tasks import periodic_check_alive
 from .serializers import *
 
 class IsAuthenticatedOrPostOnly(BasePermission):
