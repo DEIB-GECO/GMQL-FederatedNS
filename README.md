@@ -53,11 +53,14 @@ python manage.py runserver 0.0.0.0:8800
 ### Running within Docker
 If you want to run the application within a Docker container, call the provided script:
 ```
-sbin/start-nameserver [LOCAL-FOLDER] [PORT]
+sbin/start-nameserver [LOCAL-FOLDER] [PORT] [PREFIX] [CHECK-INTERVAL]
 ```
 where `LOCAL-FOLDER` and `PORT` are two optional parameters:
 - `LOCAL-FOLDER` : absolute path to the dabase folder in the local filesystem (by default the folder `data` automatically created in the working directory is used)
 - `PORT` running port of the name server (default 8888)
+- `PREFIX` if  running on root domain PREFIX=/ , if running on a domain subpath, e.g. yourdomain.com/nameserver/, set to the subpath name followed by a slas (in the example: PREFIX=nameserver/) (default /)
+- `CHECK-INTERVAL`: the Name Server checks, at regular time intervals, if all the registered instances are online. CHECK-INTERVAL represents that interval in seconds. (default 120)
+
 
 Stop the name server running the following script:
 ```
@@ -142,4 +145,10 @@ The following fields are available:
   
 Note that the creation of a group of instances does not imply that all instances in a group can use each other's datasets. The privacy of a dataset is always defined by the privacy list specified for that specific dataset.
   
+## Location Status Check
+The Name Server periodically checks the connection status of each registered location to understand whether it is online or not. By default, the check is performed every 2 minutes.
+
+Moreover, the check is immediatly performed when: 
+- The location is added for the first time (user registration) or the URL is updated by the user (from the homepage)
+- The user clicks on the 'Refresh Status' button available in the 'Instances' page
   
