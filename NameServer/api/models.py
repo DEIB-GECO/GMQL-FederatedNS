@@ -117,10 +117,12 @@ class Location(models.Model):
     )
 
     def checkAlive(self):
+        print("checking")
         response = None
         try:
-            response = requests.get(self.URI, timeout=7)
-            if (response != None and response.status_code == 200):
+            response = requests.get(self.URI+"api-info", timeout=7)
+            print(response)
+            if (response != None and response.status_code == 200 and "gmql-federated-api" in response.content):
                 self.alive=True
             else:
                 self.alive=False
